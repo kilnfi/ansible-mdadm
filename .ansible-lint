@@ -1,0 +1,18 @@
+---
+exclude_paths:
+  - .github/
+  - tests/
+  - molecule/
+
+skip_list:
+  - galaxy[no-changelog]
+  - galaxy[version-incorrect]
+  - role-name[path]
+
+warn_list:
+  - experimental
+  - ignore-errors
+  - no-handler
+  - fqcn[action-core]
+
+use_default_rules: true

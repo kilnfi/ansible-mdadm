@@ -1,13 +1,15 @@
 ---
 # Wiping out the disk devices which were part of the raid array
-- name: wipe_disks | Wiping Out Array Devices
-  command: "wipefs -af {{ item.1 }}"
+- name: Wipe_disks | Wiping Out Array Devices
+  ansible.builtin.command: "wipefs -af {{ item.1 }}"
   register: "disks_wiped"
+  changed_when: true
   with_subelements:
     - '{{ mdadm_arrays }}'
     - devices
 
 # Updates initramfs archives in /boot
-- name: wipe_disks | Updating Initramfs
-  command: "{{ update_initramfs }}"
+- name: Wipe_disks | Updating Initramfs
+  ansible.builtin.command: "{{ update_initramfs }}"
+  changed_when: true
   when: disks_wiped.changed

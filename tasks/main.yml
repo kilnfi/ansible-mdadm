@@ -2,14 +2,19 @@
 # tasks file for ansible-mdadm
 #
 
-- include_tasks: debian.yml
+- name: Main | Include Debian tasks
+  ansible.builtin.include_tasks: debian.yml
   when: ansible_facts.os_family == "Debian"
 
-- include_tasks: el.yml
+- name: Main | Include EL tasks
+  ansible.builtin.include_tasks: el.yml
   when: ansible_facts.os_family == "RedHat"
 
-- include_tasks: wipe_disks.yml
+- name: Main | Include wipe_disks tasks
+  ansible.builtin.include_tasks: wipe_disks.yml
   when: >
-        mdadm_force_wipe is defined and
-        mdadm_force_wipe
-- include_tasks: arrays.yml
+    mdadm_force_wipe is defined and
+    mdadm_force_wipe
+
+- name: Main | Include arrays tasks
+  ansible.builtin.include_tasks: arrays.yml
