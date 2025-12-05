@@ -57,6 +57,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install "ansible-core~=${{ matrix.ansible-version }}.0"
 
+      - name: Create role symlink for tests
+        run: |
+          mkdir -p tests/roles
+          ln -s ../../ tests/roles/ansible-mdadm
+
       - name: Run syntax check
         run: |
           ansible-playbook tests/test.yml -i tests/inventory --syntax-check
