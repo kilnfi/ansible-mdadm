@@ -2,16 +2,19 @@
 # tasks file for ansible-mdadm
 #
 
-- include_tasks: debian.yml
+- name: Main | Include Debian tasks
+  ansible.builtin.include_tasks: debian.yml
   when: ansible_facts.os_family == "Debian"
 
-- include_tasks: el.yml
+- name: Main | Include EL tasks
+  ansible.builtin.include_tasks: el.yml
   when: ansible_facts.os_family == "RedHat"
 
-- include_tasks: wipe_disks.yml
+- name: Main | Include wipe_disks tasks
+  ansible.builtin.include_tasks: wipe_disks.yml
   when: >
-        mdadm_force_wipe is defined and
-        mdadm_force_wipe
+    mdadm_force_wipe is defined and
+    mdadm_force_wipe
 
 - name: main | Validate auto_detect configuration
   fail:
@@ -58,4 +61,5 @@
         unused_disks is defined and
         mdadm_arrays | selectattr('auto_detect', 'defined') | selectattr('auto_detect', 'equalto', true) | list | length > 0
 
-- include_tasks: arrays.yml
+- name: Main | Include arrays tasks
+  ansible.builtin.include_tasks: arrays.yml
