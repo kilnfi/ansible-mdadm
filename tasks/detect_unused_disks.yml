@@ -29,7 +29,7 @@
   failed_when: false
 
 - name: detect_unused_disks | Get devices with filesystem
-  shell: blkid | cut -d: -f1 | sort | uniq
+  shell: "blkid | cut -d: -f1 | sort | uniq"
   register: formatted_devices
   changed_when: false
   failed_when: false
