@@ -12,6 +12,8 @@
 
 # Creating raid arrays
 # We pass yes in order to accept any questions prompted for yes|no
+# Note: Exit code 141 (SIGPIPE) is expected when mdadm closes stdin before yes finishes.
+# This is harmless when the array was successfully created (stdout contains "started").
 - name: Arrays | Creating Array(s)
   ansible.builtin.shell:
     cmd: >
@@ -25,6 +27,9 @@
     executable: /bin/bash
   register: "array_created"
   changed_when: true
+  failed_when: >
+    array_created.rc != 0 and
+    not (array_created.rc == 141 and 'started' in array_created.stdout)
   with_items: '{{ mdadm_arrays }}'
   when: >
     item.state | lower == "present" and
