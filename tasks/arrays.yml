@@ -29,7 +29,8 @@
   changed_when: true
   failed_when: >
     array_created.rc != 0 and
-    not (array_created.rc == 141 and 'started' in array_created.stdout)
+    not (array_created.rc == 141 and
+         ('started' in array_created.stdout or 'started' in array_created.stderr))
   with_items: '{{ mdadm_arrays }}'
   when: >
     item.state | lower == "present" and
