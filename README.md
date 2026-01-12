@@ -83,10 +83,7 @@ None
 
 BSD
 
-## Author Information
+## Authors
 
 - Larry Smith Jr.
 - Kiln: added detection of unused devices + some fixes
-- [@mrlesmithjr](https://twitter.com/mrlesmithjr)
-- [mrlesmithjr@gmail.com](mailto:mrlesmithjr@gmail.com)
-- [http://everythingshouldbevirtual.com](http://everythingshouldbevirtual.com)
