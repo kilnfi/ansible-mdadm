@@ -36,7 +36,7 @@
 
 - name: detect_unused_disks | Filter unused disks
   set_fact:
-    unused_disks: "{{ all_disks.stdout_lines | 
+    unused_disks: "{{ all_disks.stdout_lines |
       difference(mounted_devices.stdout_lines | default([])) |
       difference(raid_devices.stdout_lines | default([])) |
       difference(lvm_devices.stdout_lines | default([])) |
