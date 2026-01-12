@@ -18,7 +18,7 @@
   ansible.builtin.shell:
     cmd: >
       set -o pipefail &&
-      yes | mdadm --create /dev/md/{{ item.name | replace("md", "") }}
+      yes | mdadm --create /dev/md/{{ item.name | regex_replace("^md", "") }}
       --level={{ item.level }}
       {% if item.level != 1 %}--chunk={{ item.chunk_size | default('512K') }}{% endif %}
       --metadata={{ item.raid_metadata_version | default(1.2) }}
@@ -87,7 +87,7 @@
 
 # Stopping raid arrays in preparation of destroying
 - name: Arrays | Stopping Array(s)
-  ansible.builtin.command: 'mdadm --stop /dev/md/{{ item.name | replace("md", "") }}'
+  ansible.builtin.command: 'mdadm --stop /dev/md/{{ item.name | regex_replace("^md", "") }}'
   register: "array_stopped"
   changed_when: true
   with_items: '{{ mdadm_arrays }}'
@@ -97,7 +97,7 @@
 
 # Removing raid arrays
 - name: Arrays | Removing Array(s)
-  ansible.builtin.command: 'mdadm --remove /dev/md/{{ item.name | replace("md", "") }}'
+  ansible.builtin.command: 'mdadm --remove /dev/md/{{ item.name | regex_replace("^md", "") }}'
   register: "array_removed"
   changed_when: true
   with_items: '{{ mdadm_arrays }}'
