@@ -7,29 +7,39 @@
 # - Not formatted with a filesystem
 
 - name: Detect_unused_disks | Get all block devices
-  ansible.builtin.shell: lsblk -ln -o NAME,TYPE,MOUNTPOINT,FSTYPE | grep -E '^[a-z]+[0-9]*\s+disk\s*$' | awk '{print "/dev/" $1}'
+  ansible.builtin.shell:
+    cmd: set -o pipefail && lsblk -ln -o NAME,TYPE,MOUNTPOINT,FSTYPE | grep -E '^[a-z]+[0-9]*\s+disk\s*$' | awk '{print "/dev/" $1}'
+    executable: /bin/bash
   register: all_disks
   changed_when: false
 
 - name: Detect_unused_disks | Get mounted devices
-  ansible.builtin.shell: mount | awk '{print $1}' | grep '^/dev/' | sort | uniq
+  ansible.builtin.shell:
+    cmd: set -o pipefail && mount | awk '{print $1}' | grep '^/dev/' | sort | uniq
+    executable: /bin/bash
   register: mounted_devices
   changed_when: false
 
 - name: Detect_unused_disks | Get devices used in existing RAID arrays
-  ansible.builtin.shell: cat /proc/mdstat | grep -oE 'sd[a-z]+[0-9]*|nvme[0-9]+n[0-9]+' | sed 's|^|/dev/|' | sort | uniq
+  ansible.builtin.shell:
+    cmd: set -o pipefail && cat /proc/mdstat | grep -oE 'sd[a-z]+[0-9]*|nvme[0-9]+n[0-9]+' | sed 's|^|/dev/|' | sort | uniq
+    executable: /bin/bash
   register: raid_devices
   changed_when: false
   failed_when: false
 
 - name: Detect_unused_disks | Get devices used in LVM
-  ansible.builtin.shell: pvs --noheadings -o pv_name 2>/dev/null | tr -d ' ' | sort | uniq
+  ansible.builtin.shell:
+    cmd: set -o pipefail && pvs --noheadings -o pv_name 2>/dev/null | tr -d ' ' | sort | uniq
+    executable: /bin/bash
   register: lvm_devices
   changed_when: false
   failed_when: false
 
 - name: Detect_unused_disks | Get devices with filesystem
-  ansible.builtin.shell: "blkid | cut -d: -f1 | sort | uniq"
+  ansible.builtin.shell:
+    cmd: "set -o pipefail && blkid | cut -d: -f1 | sort | uniq"
+    executable: /bin/bash
   register: formatted_devices
   changed_when: false
   failed_when: false

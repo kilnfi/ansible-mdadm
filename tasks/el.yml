@@ -1,6 +1,6 @@
 ---
 - name: EL | Installing mdadm
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name: "mdadm"
     state: "present"
 

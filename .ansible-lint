@@ -8,6 +8,7 @@ skip_list:
   - galaxy[no-changelog]
   - galaxy[version-incorrect]
   - role-name[path]
+  - no-handler
 
 warn_list:
   - experimental
