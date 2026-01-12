@@ -16,7 +16,7 @@
     mdadm_force_wipe is defined and
     mdadm_force_wipe
 
-- name: main | Validate auto_detect configuration
+- name: Main | Validate auto_detect configuration
   fail:
     msg: "Error: auto_detect is set to true but devices are also defined for array {{ item.name }}. Use either devices OR auto_detect, not both."
   with_items: "{{ mdadm_arrays }}"
@@ -25,10 +25,11 @@
         item.devices is defined and
         item.devices | length > 0
 
-- include_tasks: detect_unused_disks.yml
+- name: Main | Auto-detect unused disks
+  include_tasks: detect_unused_disks.yml
   when: mdadm_arrays | selectattr('auto_detect', 'defined') | selectattr('auto_detect', 'equalto', true) | list | length > 0
 
-- name: main | Validate sufficient disks for auto-detection
+- name: Main | Validate sufficient disks for auto-detection
   fail:
     msg: |
       Error: Not enough unused disks found for auto-detection.
@@ -40,7 +41,7 @@
         unused_disks is defined and
         unused_disks | length < item.min_disks | default(3)
 
-- name: main | Set auto-detected devices for arrays with auto_detect
+- name: Main | Set auto-detected devices for arrays with auto_detect
   set_fact:
     mdadm_arrays: "{{ mdadm_arrays_updated }}"
   vars:
