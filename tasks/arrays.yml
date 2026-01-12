@@ -157,8 +157,7 @@
 - name: Arrays | Removing array from mdadm conf
   ansible.builtin.lineinfile:
     dest: "{{ mdadm_conf }}"
-    regexp: "^ARRAY /dev/{{ item.name }}"
-    line: "ARRAY /dev/{{ item.name }}"
+    regexp: '^ARRAY /dev/md/?{{ item.name | regex_replace("^md", "") }} '
     state: "absent"
   with_items: '{{ mdadm_arrays }}'
   when: >
